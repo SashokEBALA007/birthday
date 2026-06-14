@@ -293,12 +293,75 @@ function goToForm(){
 
 function sendData(){
 
-    alert("Анкета отправлена ✔");
+    const name = document.getElementById("name").value;
+    const status = document.getElementById("status").value;
+    const food = document.getElementById("food").value;
+    const drinks = document.getElementById("drinks").value;
+    const extra = document.getElementById("extra").value;
 
-    // Здесь потом подключим Telegram безопасным способом
+    if(name.trim() === ""){
+        alert("Введите имя!");
+        return;
+    }
+
+    /* ==========================
+       ВСТАВЬ СЮДА ТОКЕН БОТА
+       ========================== */
+
+    const TOKEN = "8789045496:AAHOePohvg6YDAOdSJ7Zaco38Ue9Ku67U00";
+
+    /* ==========================
+       ВСТАВЬ СЮДА CHAT ID
+       ========================== */
+
+    const CHAT_ID = "8697789661";
+
+    const message =
+`🎯 НОВЫЙ БОЕЦ
+
+👤 Имя: ${name}
+
+📌 Статус: ${status}
+
+🍖 Пожелания по еде:
+${food}
+
+🥤 Напитки:
+${drinks}
+
+⚠️ Дополнительная информация:
+${extra}`;
+
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if(data.ok){
+            alert("МИССИЯ ПРИНЯТА ✔");
+        }else{
+            console.log(data);
+            alert("Ошибка Telegram");
+        }
+
+    })
+    .catch(error => {
+
+        console.log(error);
+        alert("Ошибка отправки");
+
+    });
+
 }
 
 </script>
-
 </body>
 </html>
